@@ -2,7 +2,7 @@
     "name": "webexmachina/contao-auctions",
     "description": "Auctions for Contao Open Source CMS",
     "type": "contao-bundle",
-    "license": "Apache License 2.0",
+    "license": "LGPL-3.0-or-later",
     "website" : "https://www.webexmachina.fr/",
     "authors": [
         {
