@@ -12,7 +12,7 @@ declare(strict_types=1);
  * @link     https://github.com/Web-Ex-Machina/contao-auctions/
  */
 
-namespace WEM\Auctions\DataContainer;
+namespace WEM\AuctionsBundle\DataContainer;
 
 class AuctionContainer
 {
@@ -42,7 +42,7 @@ class AuctionContainer
             }
         }
 
-        $objAlias = $this->Database->prepare('SELECT id FROM tl_article WHERE id=? OR alias=?')
+        $objAlias = \Database::getInstance()->prepare('SELECT id FROM tl_article WHERE id=? OR alias=?')
                                    ->execute($dc->id, $varValue)
         ;
 

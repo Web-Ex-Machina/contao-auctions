@@ -5,11 +5,11 @@
 				<source>Auctions</source>
 				<target>Auctions</target>
 			</trans-unit>
-			<trans-unit id="MOD.wem-auctions.0">
+			<trans-unit id="MOD.wemauctions.0">
 				<source>Auctions</source>
 				<target>Auctions</target>
 			</trans-unit>
-			<trans-unit id="MOD.wem-auctions.1">
+			<trans-unit id="MOD.wemauctions.1">
 				<source>Manage auctions</source>
 				<target>Manage auctions</target>
 			</trans-unit>

@@ -12,7 +12,7 @@ declare(strict_types=1);
  * @link     https://github.com/Web-Ex-Machina/contao-auctions/
  */
 
-namespace WEM\Auctions\Module;
+namespace WEM\AuctionsBundle\Module;
 
 class DisplayAuction extends \Module
 {

@@ -12,7 +12,7 @@ declare(strict_types=1);
  * @link     https://github.com/Web-Ex-Machina/contao-auctions/
  */
 
-namespace WEM\Auctions\Model;
+namespace WEM\AuctionsBundle\Model;
 
 class AuctionOffer extends \WEM\UtilsBundle\Model\Model
 {

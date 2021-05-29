@@ -12,21 +12,20 @@ declare(strict_types=1);
  * @link     https://github.com/Web-Ex-Machina/contao-auctions/
  */
 
-namespace WEM\Auctions\ContaoManager;
+namespace WEM\AuctionsBundle\ContaoManager;
 
 use Contao\CoreBundle\ContaoCoreBundle;
 use Contao\ManagerPlugin\Bundle\BundlePluginInterface;
 use Contao\ManagerPlugin\Bundle\Config\BundleConfig;
 use Contao\ManagerPlugin\Bundle\Parser\ParserInterface;
-use Contao\ManagerPlugin\Routing\RoutingPluginInterface;
-use WEM\Auctions\AuctionsBundle;
+use WEM\AuctionsBundle\WEMAuctionsBundle;
 
 /**
  * Plugin for the Contao Manager.
  *
  * @author Web ex Machina <https://www.webexmachina.fr>
  */
-class Plugin implements BundlePluginInterface, RoutingPluginInterface
+class Plugin implements BundlePluginInterface
 {
     /**
      * {@inheritdoc}
@@ -34,7 +33,7 @@ class Plugin implements BundlePluginInterface, RoutingPluginInterface
     public function getBundles(ParserInterface $parser)
     {
         return [
-            BundleConfig::create(AuctionsBundle::class)
+            BundleConfig::create(WEMAuctionsBundle::class)
                 ->setLoadAfter([
                     ContaoCoreBundle::class,
                 ])

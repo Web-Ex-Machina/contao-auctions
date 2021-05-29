@@ -108,7 +108,7 @@ $GLOBALS['TL_DCA']['tl_wem_auction'] = [
             'search' => true,
             'eval' => ['rgxp' => 'alias', 'doNotCopy' => true, 'maxlength' => 128, 'tl_class' => 'w50 clr'],
             'save_callback' => [
-                [WEM\Auctions\DataContainer\AuctionContainer::class, 'generateAlias'],
+                [WEM\AuctionsBundle\DataContainer\AuctionContainer::class, 'generateAlias'],
             ],
             'sql' => "varchar(128) BINARY NOT NULL default ''",
         ],

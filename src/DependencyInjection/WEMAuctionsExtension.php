@@ -12,7 +12,7 @@ declare(strict_types=1);
  * @link     https://github.com/Web-Ex-Machina/contao-auctions/
  */
 
-namespace WEM\Auctions\DependencyInjection;
+namespace WEM\AuctionsBundle\DependencyInjection;
 
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -24,7 +24,7 @@ use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
  *
  * @author Web ex Machina <https://www.webexmachina.fr>
  */
-class AuctionsExtension extends Extension
+class WEMAuctionsExtension extends Extension
 {
     /**
      * {@inheritdoc}

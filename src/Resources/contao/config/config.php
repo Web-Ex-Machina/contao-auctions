@@ -32,12 +32,12 @@ array_insert(
  */
 array_insert($GLOBALS['FE_MOD'], 2, [
     'wemauctionssection' => [
-        'wem-auctions_display-auction' => WEM\Auctions\Module\DisplayAuction::class,
+        'wem-auctions_display-auction' => WEM\AuctionsBundle\Module\DisplayAuction::class,
     ],
 ]);
 
 /*
  * Models
  */
-$GLOBALS['TL_MODELS'][WEM\Auctions\Model\Auction::getTable()] = 'WEM\Auctions\Model\Auction';
-$GLOBALS['TL_MODELS'][WEM\Auctions\Model\AuctionOffer::getTable()] = 'WEM\Auctions\Model\AuctionOffer';
+$GLOBALS['TL_MODELS'][WEM\AuctionsBundle\Model\Auction::getTable()] = 'WEM\AuctionsBundle\Model\Auction';
+$GLOBALS['TL_MODELS'][WEM\AuctionsBundle\Model\AuctionOffer::getTable()] = 'WEM\AuctionsBundle\Model\AuctionOffer';

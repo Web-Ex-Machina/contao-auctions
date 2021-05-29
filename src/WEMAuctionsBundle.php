@@ -12,14 +12,15 @@ declare(strict_types=1);
  * @link     https://github.com/Web-Ex-Machina/contao-auctions/
  */
 
-namespace WEM\AuctionsBundle\Model;
+namespace WEM\AuctionsBundle;
 
-class Auction extends \WEM\UtilsBundle\Model\Model
+use Symfony\Component\HttpKernel\Bundle\Bundle;
+
+/**
+ * Configures the Altrad bundle.
+ *
+ * @author Web ex Machina <https://www.webexmachina.fr>
+ */
+class WEMAuctionsBundle extends Bundle
 {
-    /**
-     * Table name.
-     *
-     * @var string
-     */
-    protected static $strTable = 'tl_wem_auction';
 }
