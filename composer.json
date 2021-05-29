@@ -1,0 +1,32 @@
+{
+    "name": "webexmachina/contao-auctions",
+    "description": "Auctions for Contao Open Source CMS",
+    "type": "contao-bundle",
+    "license": "Apache License 2.0",
+    "website" : "https://www.webexmachina.fr/",
+    "authors": [
+        {
+            "name": "Web ex Machina",
+            "homepage": "https://www.webexmachina.fr",
+            "role":"Developer"
+        }
+    ],
+    "support":{
+        "issues":"https://github.com/webexmachina/contao-auctions/issues",
+        "source":"https://github.com/webexmachina/contao-auctions"
+    },
+    "require": {
+        "php": "^7.3",
+        "contao/core-bundle": "^4.9",
+        "terminal42/dcawizard": "~2.4",
+        "webexmachina/contao-utils": "^0.3"
+    },
+    "autoload":{
+        "psr-4": {
+            "WEM\\Auctions\\": "src/"
+        }
+    },
+    "extra":{
+        "contao-manager-plugin": "WEM\\Auctions\\ContaoManager\\Plugin"
+    }
+}

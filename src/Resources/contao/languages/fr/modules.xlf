@@ -1,0 +1,31 @@
+<?xml version="1.0" ?><xliff version="1.1">
+  <file datatype="php" original="system/modules/wem-auctions/languages/en/modules.php" source-language="en" target-language="fr">
+    <body>
+    	<trans-unit id="MOD.wemauctionssection">
+				<source>Auctions</source>
+				<target>Enchères</target>
+			</trans-unit>
+			<trans-unit id="MOD.wem-auctions.0">
+				<source>Auctions</source>
+				<target>Enchères</target>
+			</trans-unit>
+			<trans-unit id="MOD.wem-auctions.1">
+				<source>Manage auctions</source>
+				<target>Gérer les ventes aux enchères</target>
+			</trans-unit>
+
+			<trans-unit id="FMD.wemauctionssection">
+				<source>Auctions</source>
+				<target>Enchères</target>
+			</trans-unit>
+			<trans-unit id="FMD.wem-auctions_display-auction.0">
+				<source>Display auction</source>
+				<target>Afficher une vente aux enchères</target>
+			</trans-unit>
+			<trans-unit id="FMD.wem-auctions_display-auction.1">
+				<source>Display auction</source>
+				<target>Afficher une vente aux enchères</target>
+			</trans-unit>
+		</body>
+  </file>
+</xliff>

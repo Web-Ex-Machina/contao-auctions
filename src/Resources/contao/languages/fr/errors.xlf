@@ -1,0 +1,11 @@
+<?xml version="1.0" ?><xliff version="1.1">
+  <file datatype="php" original="system/modules/wem-auctions/languages/en/errors.php" source-language="en" target-language="fr">
+    <body>
+			<trans-unit id="WEMAUCTIONS.ERR.unknownAjaxRequest">
+				<source>Unkown request: %s.</source>
+				<target>Requête inconnue : %s.</target>
+			</trans-unit>
+		</body>
+  </file>
+</xliff>
+
