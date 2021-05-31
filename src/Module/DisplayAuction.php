@@ -59,10 +59,20 @@ class DisplayAuction extends \Module
             $this->objAuction = AuctionModel::findByPk($this->wem_auction);
 
             // Load a user
-            // cookie + check ip
+            $this->Template->hasUser = false;
+            $arrUser = $this->loadUser();
+            if(null !== $arrUser)
+            {
+                $this->Template->hasUser = true;
+                $this->Template->userFirstname = $arrUser[0];
+                $this->Template->userLastname = $arrUser[1];
+                $this->Template->userCity = $arrUser[2];
+                $this->Template->userPhone = $arrUser[3];
+                $this->Template->userEmail = $arrUser[4];
+            }
 
-            
-
+            // Load previous offers
+            $objOffers = $this->
 
         } catch (\Exception $e) {
             $this->Template->hasError = true;
@@ -105,11 +115,72 @@ class DisplayAuction extends \Module
         }
     }
 
-    protected function loadUser() {
-        
+    protected function loadUser(): void
+    {
+        if ($_COOKIE['wem_auction_user']) {
+            $arrUser = explode('::', $_COOKIE['wem_auction_user']);
+            return $arrUser;
+        }
+
+        return null;
     }
 
-    protected function getOffers($c = [], $limit = 30, $offset = 0, $o = []) {
-        
+    /**
+     * Parse multiple items.
+     *
+     * @param array  $arrItems    [Array of Logs]
+     * @param string $strTemplate [Logs template]
+     *
+     * @return array
+     */
+    protected function parseItems($arrItems, $strTemplate = 'wem_auction_offer_row_default')
+    {
+        try {
+            $limit = count($arrItems);
+            if ($limit < 1) {
+                return [];
+            }
+
+            $count = 0;
+            $arrElements = [];
+            foreach ($arrItems as $arrItem) {
+                $arrElements[] = $this->parseItem($arrItem, $strTemplate, ((1 == ++$count) ? ' first' : '').(($count == $limit) ? ' last' : '').((0 == ($count % 2)) ? ' odd' : ' even'), $count);
+            }
+
+            return $arrElements;
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
+
+    /**
+     * Parse an item.
+     *
+     * @param array  $arrItem     [Contract as Array]
+     * @param string $strTemplate [Template]
+     * @param string $strClass    [CSS Class]
+     * @param int    $intCount    [Iterator]
+     *
+     * @return string
+     */
+    public function parseItem($arrItem, $strTemplate = 'wem_auction_offer_row_default', $strClass = '', $intCount = 0)
+    {
+        try {
+            /* @var \PageModel $objPage */
+            global $objPage;
+
+            /** @var \FrontendTemplate|object $objTemplate */
+            $objTemplate = new \FrontendTemplate($strTemplate);
+            $objTemplate->setData($arrItem);
+            $objTemplate->class = (('' != $arrItem['cssClass']) ? ' '.$arrItem['cssClass'] : '').$strClass;
+            $objTemplate->count = $intCount;
+
+            $objTemplate->createdAt = date('d/m/Y à H:i', $objTemplate->createdAt);
+            $objTemplate->tstamp = date('d/m/Y à H:i', $objTemplate->tstamp);
+
+            return $objTemplate->parse();
+        } catch (Exception $e) {
+            throw $e;
+        }
     }
 }
