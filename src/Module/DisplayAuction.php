@@ -14,6 +14,8 @@ declare(strict_types=1);
 
 namespace WEM\AuctionsBundle\Module;
 
+use WEM\AuctionsBundle\Model\Auction as AuctionModel;
+
 class DisplayAuction extends \Module
 {
     /**
@@ -53,6 +55,15 @@ class DisplayAuction extends \Module
     protected function compile(): void
     {
         try {
+            // Load the auction
+            $this->objAuction = AuctionModel::findByPk($this->wem_auction);
+
+            // Load a user
+            // cookie + check ip
+
+            
+
+
         } catch (\Exception $e) {
             $this->Template->hasError = true;
             $this->Template->error = $e->getMessage();
@@ -73,6 +84,14 @@ class DisplayAuction extends \Module
 
                     break;
 
+                    case 'getOffers':
+
+                    break;
+
+                    case 'createUser':
+
+                    break;
+
                     default:
                         throw new \Exception(sprintf($GLOBALS['TL_LANG']['WEMAUCTIONS']['ERR']['unknownAjaxRequest'], \Input::post('action')));
                 }
@@ -84,5 +103,13 @@ class DisplayAuction extends \Module
             echo json_encode($arrResponse);
             die;
         }
+    }
+
+    protected function loadUser() {
+        
+    }
+
+    protected function getOffers($c = [], $limit = 30, $offset = 0, $o = []) {
+        
     }
 }

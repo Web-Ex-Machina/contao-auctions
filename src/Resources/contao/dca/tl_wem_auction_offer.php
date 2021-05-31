@@ -34,10 +34,10 @@ $GLOBALS['TL_DCA']['tl_wem_auction_offer'] = [
     'list' => [
         'sorting' => [
             'mode' => 4,
-            'fields' => ['provider DESC'],
+            'fields' => ['createdAt DESC'],
             'headerFields' => ['title'],
             'panelLayout' => 'filter;sort,search,limit',
-            'child_record_callback' => ['AltradLogin\DataContainer\AppProviderContainer', 'listItems'],
+            'child_record_callback' => ['WEM\AuctionsBundle\DataContainer\AuctionOfferContainer', 'listItems'],
             'child_record_class' => 'no_padding',
         ],
         'global_operations' => [
@@ -70,7 +70,7 @@ $GLOBALS['TL_DCA']['tl_wem_auction_offer'] = [
 
     // Palettes
     'palettes' => [
-        'default' => '{title_legend},provider',
+        'default' => '{offer_legend},createdAt,amount;{user_legend},firstname,lastname,city,phone,email',
     ],
 
     // Fields
@@ -91,57 +91,52 @@ $GLOBALS['TL_DCA']['tl_wem_auction_offer'] = [
             'flag' => 8,
             'sql' => "int(10) unsigned NOT NULL default '0'",
         ],
-
-        'provider' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_wem_auction_offer']['provider'],
+        'amount' => [
+            'default' => '0.00',
+            'inputType' => 'text',
+            'eval' => ['mandatory' => true, 'rgxp' => 'digit', 'tl_class' => 'w50'],
+            'sql' => "decimal(10,2) NOT NULL default '0.00'",
+        ],
+        'firstname' => [
+            'exclude' => true,
+            'search' => true,
+            'sorting' => true,
+            'flag' => 1,
+            'inputType' => 'text',
+            'eval' => ['mandatory' => true, 'maxlength' => 255, 'feEditable' => true, 'feViewable' => true, 'feGroup' => 'personal', 'tl_class' => 'w50'],
+            'sql' => "varchar(255) NOT NULL default ''",
+        ],
+        'lastname' => [
+            'exclude' => true,
+            'search' => true,
+            'sorting' => true,
+            'flag' => 1,
+            'inputType' => 'text',
+            'eval' => ['mandatory' => true, 'maxlength' => 255, 'feEditable' => true, 'feViewable' => true, 'feGroup' => 'personal', 'tl_class' => 'w50'],
+            'sql' => "varchar(255) NOT NULL default ''",
+        ],
+        'city' => [
             'exclude' => true,
             'filter' => true,
-            'inputType' => 'select',
-            'eval' => ['chosen' => true, 'tl_class' => 'w50', 'submitOnChange' => true],
-            'foreignKey' => 'tl_wem_provider.title',
-            'sql' => "int(10) unsigned NOT NULL default '0'",
-            'relation' => ['type' => 'hasOne', 'load' => 'eager'],
+            'search' => true,
+            'sorting' => true,
+            'inputType' => 'text',
+            'eval' => ['maxlength' => 255, 'feEditable' => true, 'feViewable' => true, 'feGroup' => 'address', 'tl_class' => 'w50'],
+            'sql' => "varchar(255) NOT NULL default ''",
         ],
-
-        'groups' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_wem_auction_offer']['groups'],
+        'phone' => [
             'exclude' => true,
-            'filter' => true,
-            'inputType' => 'select',
-            'options_callback' => ['AltradLogin\DataContainer\AppProviderContainer', 'getGroups'],
-            'eval' => ['chosen' => true, 'tl_class' => 'w50', 'multiple' => true],
-            'sql' => 'blob NULL',
+            'search' => true,
+            'inputType' => 'text',
+            'eval' => ['maxlength' => 64, 'rgxp' => 'phone', 'decodeEntities' => true, 'feEditable' => true, 'feViewable' => true, 'feGroup' => 'contact', 'tl_class' => 'w50'],
+            'sql' => "varchar(64) NOT NULL default ''",
         ],
-
-        'emails' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_wem_auction_offer']['emails'],
+        'email' => [
             'exclude' => true,
-            'inputType' => 'listWizard',
-            'eval' => ['tl_class' => 'clr'],
-            'sql' => 'blob NULL',
-        ],
-        'domains' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_wem_auction_offer']['domains'],
-            'exclude' => true,
-            'inputType' => 'listWizard',
-            'eval' => ['tl_class' => 'clr'],
-            'sql' => 'blob NULL',
-        ],
-        'ips' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_wem_auction_offer']['ips'],
-            'exclude' => true,
-            'inputType' => 'listWizard',
-            'eval' => ['tl_class' => 'clr'],
-            'sql' => 'blob NULL',
-        ],
-
-        'sendNotification' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_wem_auction_offer']['sendNotification'],
-            'exclude' => true,
-            'inputType' => 'select',
-            'options_callback' => [AltradLogin\DataContainer\AppProviderContainer::class, 'getSendCodeNotifications'],
-            'eval' => ['includeBlankOption' => true, 'chosen' => true, 'tl_class' => 'clr'],
-            'sql' => "int(10) unsigned NOT NULL default '0'",
+            'search' => true,
+            'inputType' => 'text',
+            'eval' => ['mandatory' => true, 'maxlength' => 255, 'rgxp' => 'email', 'unique' => true, 'decodeEntities' => true, 'feEditable' => true, 'feViewable' => true, 'feGroup' => 'contact', 'tl_class' => 'w50'],
+            'sql' => "varchar(255) NOT NULL default ''",
         ],
     ],
 ];
