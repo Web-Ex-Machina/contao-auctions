@@ -1,1 +1,54 @@
-Display auction
+<div class="<?= $this->class ?>" <?= $this->cssID ?>>
+	<?php if($this->error): ?>
+		<div class="bg-error m-bottom"><?= $this->message ?></div>
+	<?php else: ?>
+		<?php if ($this->Template->hasUser): ?>
+			<!-- is user: button Acceder à la vente -->
+		<?php else: ?>
+			<!-- no user: display form -->
+			<h2>Pour participer à la vente, merci de vous inscrire</h2>
+			<form class="d-grid cols-2 cols-xxs-1">
+				<div class="form-group">
+					<label for="lastname">Nom <span class="mandatory ft-red">*</span></label>
+					<input type="text" name="lastname" id="lastname" class="m-bottom-0" placeholder="Votre nom" required>
+				</div>
+				<div class="form-group">
+					<label for="firstname">Prénom <span class="mandatory ft-red">*</span></label>
+					<input type="text" name="firstname" id="firstname" class="m-bottom-0" placeholder="Votre prénom" required>
+				</div>
+				<div class="form-group">
+					<label for="email">Adresse email <span class="mandatory ft-red">*</span></label>
+					<input type="email" name="email" id="email" class="m-bottom-0"  placeholder="Indiquez votre adresse email" required>
+				</div>
+				<div class="form-group">
+					<label for="phone">Téléphone</label>
+					<input type="tel" name="phone" id="phone" class="m-bottom-0" placeholder="Votre n° de téléphone">
+				</div>
+				<div class="form-group">
+					<label for="city">Commune de résidence <span class="mandatory ft-red">*</span></label>
+					<input type="text" name="city" id="city" class="m-bottom-0" placeholder="Votre commune de résidence" required>
+				</div>
+			</form>
+		<?php endif ?>
+	<?php endif ?>
+</div>
+
+<!-- 
+Si t'as un user dans le template
+$this->Template->hasUser = true;
+                $this->Template->userFirstname = $arrUser[0];
+                $this->Template->userLastname = $arrUser[1];
+                $this->Template->userCity = $arrUser[2];
+                $this->Template->userPhone = $arrUser[3];
+                $this->Template->userEmail = $arrUser[4];
+Si t'as pas d'offres :
+$this->Template->noOffers = true;
+Les offres en html, à implode (comme d'hab) : $this->Template->offers = $this->parseItems($arrOffers);
+AJAX -> createUser
+firstname
+lastname
+city
+email
+phone
+(phone est pas mandatory, les autres t'envoient péter) 
+-->
