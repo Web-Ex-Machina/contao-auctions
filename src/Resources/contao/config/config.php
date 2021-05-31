@@ -41,3 +41,19 @@ array_insert($GLOBALS['FE_MOD'], 2, [
  */
 $GLOBALS['TL_MODELS'][WEM\AuctionsBundle\Model\Auction::getTable()] = 'WEM\AuctionsBundle\Model\Auction';
 $GLOBALS['TL_MODELS'][WEM\AuctionsBundle\Model\AuctionOffer::getTable()] = 'WEM\AuctionsBundle\Model\AuctionOffer';
+
+/*
+ * Notifications
+ */
+$GLOBALS['NOTIFICATION_CENTER']['NOTIFICATION_TYPE']['wemauctions_notifications'] = [
+    'wemauctions_createUser' => [
+        'recipients' => ['recipient', 'admin_email'],
+        'email_text' => ['action', 'code', 'user_*'],
+        'email_html' => ['action', 'code', 'user_*'],
+        'email_sender_name' => ['admin_email'],
+        'email_sender_address' => ['admin_email'],
+        'email_recipient_cc' => ['admin_email'],
+        'email_recipient_bcc' => ['admin_email'],
+        'email_replyTo' => ['admin_email'],
+    ],
+];

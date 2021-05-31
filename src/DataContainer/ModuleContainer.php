@@ -33,4 +33,33 @@ class ModuleContainer
 
         return $arrData;
     }
+
+    /**
+     * Get the notifications.
+     *
+     * @return array
+     */
+    public function getCreateUserNotifications()
+    {
+        return $this->getNotificationsByType('wemauctions_createUser');
+    }
+
+    /**
+     * Get the notifications by type.
+     *
+     * @param string $type
+     *
+     * @return array
+     */
+    private function getNotificationsByType($type)
+    {
+        $notifications = [];
+        $records = \Database::getInstance()->prepare('SELECT id, title FROM tl_nc_notification WHERE type=? ORDER BY title')->execute($type);
+
+        while ($records->next()) {
+            $notifications[$records->id] = $records->title;
+        }
+
+        return $notifications;
+    }
 }
