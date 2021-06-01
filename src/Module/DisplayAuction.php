@@ -59,6 +59,11 @@ class DisplayAuction extends \Module
             // Load the auction
             $this->objAuction = AuctionModel::findByPk($this->wem_auction);
 
+            // Catch Ajax
+            $this->handleAjaxRequests();
+
+            $this->Template->moduleID = $this->id;
+
             // Load a user
             $this->Template->hasUser = false;
             $arrUser = $this->loadUser();
@@ -98,7 +103,7 @@ class DisplayAuction extends \Module
     protected function handleAjaxRequests(): void
     {
         // Catch AJAX Requests
-        if (\Input::post('TL_WEM_AJAX') && $this->id === \Input::post('module')) {
+        if (\Input::post('TL_AJAX') && $this->id === \Input::post('module')) {
             try {
                 switch (\Input::post('action')) {
                     case 'addOffer':
@@ -109,7 +114,7 @@ class DisplayAuction extends \Module
                         // Get the highest offer and check that the new amount is above it
                         $objOffer = AuctionOfferModel::findItems(['pid' => $this->wem_auction], 1, 0, 'amount DESC');
 
-                        if(\Input::post('amount') <= $objOffer->amount) {
+                        if (\Input::post('amount') <= $objOffer->amount) {
                             throw new \Exception('Veuillez saisir un montant plus élevé que la meilleure offre actuelle');
                         }
 
@@ -201,6 +206,15 @@ class DisplayAuction extends \Module
 
                         \System::setCookie($strName, $strValue, strtotime('+30 days'));
 
+                        $arrResponse = ['status' => 'success', 'msg' => 'Votre compte a été créé avec succès !'];
+
+                        break;
+
+                    case 'logoutUser':
+                        $strName = 'wem_auction_user';
+                        \System::setCookie($strName, "", strtotime('-1 day'));
+
+                        $arrResponse = ['status' => 'success', 'msg' => 'Votre compte a été déconnecté'];
                         break;
 
                     default:
