@@ -4,10 +4,15 @@
 	<?php else: ?>
 		<?php if ($this->Template->hasUser): ?>
 			<!-- is user: button Acceder à la vente -->
+			<?= $this->Template->userFirstname ?><br>
+			<?= $this->Template->userLastname ?><br>
+			<?= $this->Template->userCity ?><br>
+			<?= $this->Template->userPhone ?><br>
+			<?= $this->Template->userEmail ?><br>
 		<?php else: ?>
 			<!-- no user: display form -->
 			<h2>Pour participer à la vente, merci de vous inscrire</h2>
-			<form class="d-grid cols-2 cols-xxs-1">
+			<form class="d-grid cols-2 cols-xxs-1" id="formCreateUser">
 				<div class="form-group">
 					<label for="lastname">Nom <span class="mandatory ft-red">*</span></label>
 					<input type="text" name="lastname" id="lastname" class="m-bottom-0" placeholder="Votre nom" required>
@@ -29,9 +34,115 @@
 					<input type="text" name="city" id="city" class="m-bottom-0" placeholder="Votre commune de résidence" required>
 				</div>
 			</form>
+			<button class="btn-load m-y-x2 center" data-process="createUser">Accéder à la vente</button>
 		<?php endif ?>
 	<?php endif ?>
 </div>
+
+<script>
+	var rt = '{{request_token}}';
+    window.addEventListener('load', function(){});
+
+    var createUser = function(){
+    	return new Promise(function(resolve,reject){
+    		var isOK = true;
+    	    var data = {
+   				'TL_AJAX':true ,
+				'REQUEST_TOKEN':rt ,
+				'action': 'createUser',
+				'module': <?= $this->moduleID ?>
+   			};
+   			$('#formCreateUser input').each(function(){
+   				if (this.required && !this.value){
+   					notif_fade.warning('Veuillez remplir le champs '+$(this).prev('label').html());
+   					isOK = false;
+   				}
+   				data[this.name] = this.value;
+   			});
+   			if (!isOK)
+   				reject();
+   			else{
+   				$.ajax({
+					timeout: 10000,
+					url: window.location.pathname,
+					type: 'post',
+					data: data,
+				}).done(function(data){
+	      			try{var results = $.parseJSON(data); } catch(e){ reject();throw e;}
+	      			console.log(results);
+	  				if (results.status == 'success'){
+	  				}
+		    		resolve();
+				}).fail(function(jqXHR, textStatus){
+					console.log(toggleFeed);
+		         	console.log(jqXHR, textStatus);
+		         	reject();
+		        });
+   			}
+   			console.log(data);
+    	});
+    }
+
+    var createUser_ = function(){
+    	return new Promise(function(resolve,reject){
+    		var isOK = true;
+    		var data = {}
+   			$('#formCreateUser input').each(function(){
+   				if (this.required && !this.value){
+   					notif_fade.warning('Veuillez remplir le champs '+$(this).prev('label').html());
+   					isOK = false;
+   				}
+   				data[this.name] = this.value;
+   			});
+   			if (!isOK)
+   				reject();
+   			else{
+   				reqVivo('createUser',data).then(funtion(results){
+   					console.log(results);
+   				}).catch(function(err){
+   					reject(err);
+   				})
+   			}
+    	});
+    }
+
+
+    var reqVivo = function(action,params = {}){
+		return new Promise(function(resolve,reject){
+			var objFields = {
+				'TL_AJAX':true ,
+				'REQUEST_TOKEN':rt ,
+				'action': action,
+				'module': <?= $this->moduleID ?>
+			};
+			for(var k in params)
+				objFields[k] = params[k];
+
+			$.ajax({
+				method: "POST",
+				timeout: 30000,
+				data: objFields
+			}).done(function(msg){			
+				try{
+					var results = JSON.parse(msg);
+					// console.log(results);
+					if("error" === results["status"])
+						reject(results["msg"]);
+					else{
+						resolve(results);
+					}
+				} catch(err){
+	       			reject(err); 
+				}
+			}).fail(function(jqXHR, textStatus, errorThrown){
+				reject(textStatus+"<br>"+errorThrown);
+			})
+		}).catch(function(err){
+			notif.error(err);
+			throw err;
+		});
+	}
+</script>	
 
 <!-- 
 Si t'as un user dans le template
@@ -52,3 +163,11 @@ email
 phone
 (phone est pas mandatory, les autres t'envoient péter) 
 -->
+
+<!-- AJAX -> getOffers
+timestamp
+Si timestamp est renseigné, ça te retournera toutes les offres après ledit timetstamp
+Ca te permettra d'ajouter les offres au DOM sans avoir à tout recharger -->
+<!-- 
+AJAX -> addOffer
+amount -->
