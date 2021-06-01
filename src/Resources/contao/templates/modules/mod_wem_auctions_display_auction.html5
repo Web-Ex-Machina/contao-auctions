@@ -97,7 +97,7 @@
    			if (!isOK)
    				reject();
    			else{
-   				reqVivo('createUser',data).then(funtion(results){
+   				reqVivo('createUser',data).then(function(results){
    					console.log(results);
    				}).catch(function(err){
    					reject(err);
