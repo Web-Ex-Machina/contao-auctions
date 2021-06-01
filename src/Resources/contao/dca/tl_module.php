@@ -12,7 +12,7 @@ declare(strict_types=1);
  * @link     https://github.com/Web-Ex-Machina/altrad-v3-module/
  */
 
-$GLOBALS['TL_DCA']['tl_module']['palettes']['wem-auctions_display-auction'] = '{title_legend},name,type;{config_legend},wem_auction';
+$GLOBALS['TL_DCA']['tl_module']['palettes']['wem-auctions_display-auction'] = '{title_legend},name,type;{config_legend},wem_auction,wem_auction_createUserNotification';
 
 $GLOBALS['TL_DCA']['tl_module']['fields']['wem_auction'] = [
     'label' => &$GLOBALS['TL_LANG']['tl_module']['wem_auction'],
@@ -21,4 +21,12 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['wem_auction'] = [
     'options_callback' => [WEM\AuctionsBundle\DataContainer\ModuleContainer::class, 'getAuctions'],
     'eval' => ['includeBlankOption' => true, 'chosen' => true, 'tl_class' => 'w50'],
     'sql' => "varchar(32) NOT NULL default ''",
+];
+$GLOBALS['TL_DCA']['tl_module']['fields']['wem_auction_createUserNotification'] = [
+    'label' => &$GLOBALS['TL_LANG']['tl_module']['wem_auction_createUserNotification'],
+    'exclude' => true,
+    'inputType' => 'select',
+    'options_callback' => [WEM\AuctionsBundle\DataContainer\ModuleContainer::class, 'getCreateUserNotifications'],
+    'eval' => ['includeBlankOption' => true, 'chosen' => true, 'tl_class' => 'clr'],
+    'sql' => "int(10) unsigned NOT NULL default '0'",
 ];
