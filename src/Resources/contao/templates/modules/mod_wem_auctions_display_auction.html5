@@ -2,24 +2,54 @@
 	<?php if($this->error): ?>
 		<div class="bg-error m-bottom"><?= $this->message ?></div>
 	<?php else: ?>
-		<?php if ($this->Template->hasUser): ?>
-			<!-- is user: button Acceder à la vente -->
-			<?= $this->Template->userFirstname ?><br>
-			<?= $this->Template->userLastname ?><br>
-			<?= $this->Template->userCity ?><br>
-			<?= $this->Template->userPhone ?><br>
-			<?= $this->Template->userEmail ?><br>
+		<?php if ($this->hasUser): ?>
+			<input type="hidden" name="firstname" id="firstname" value="<?= $this->user['firstname'] ?>">
+			<input type="hidden" name="lastname" id="lastname" value="<?= $this->user['lastname'] ?>">
+			<input type="hidden" name="city" id="city" value="<?= $this->user['city'] ?>">
+			<input type="hidden" name="phone" id="phone" value="<?= $this->user['phone'] ?>">
+			<input type="hidden" name="email" id="email" value="<?= $this->user['email'] ?>">
+			<div class="auction__header">
+				<p>
+					<span class="ft-1-2-em">Bienvenue, <?= $this->user['firstname'] ?> <?= $this->user['lastname'] ?></span><br>
+					<span class="ft-0-6-em ">Vous n'êtes pas <?= $this->user['firstname'] ?> <?= $this->user['lastname'] ?> ? <a href="#" class="btn-load m-y-x2  exclude" data-process="logoutUser">Me déconnecter</a></span>
+				</p>
+			</div>
+			<?php if(1623268800 > time()): ?>
+				La vente commencera le 09 juin 2021 à 20h
+			<?php elseif(1623441600 < time()): ?>
+				La vente est terminée
+			<?php else: ?>
+				<div class="d-grid cols-2 cols-xxs-1">
+					<div class="auction__latestOffers">
+						<p class="ft-1-2-em">Dernières offres</p>
+						<div class="auction__latestOffers__wrapper"></div>
+						<div class="auction__noOffer">Il n'y a aucune offre pour le moment.</div>
+						<input type="hidden" name="auction__latestOffer" id="auction__latestOffer" value="0">
+					</div>
+					<div class="auction__userOffer">
+						<p class="ft-1-2-em">Mon offre</p>
+						<div class="input-group">
+							<div class="form-group">
+								<input type="text" name="userOffer" id="userOffer" pattern="[0-9]">
+								<span class="currency">€</span>
+							</div>
+							<button class="squared btn-bd-primary btn-load" data-process="increaseOffer" data-amount="10" data-icon="false" data-result="false">+10€</button>
+						</div>
+						<button class="btn-load w-100 " data-process="addOffer" data-icon="false" data-result="false">Valider</button>
+					</div>
+				</div>
+			<?php endif ?>
 		<?php else: ?>
 			<!-- no user: display form -->
 			<h2>Pour participer à la vente, merci de vous inscrire</h2>
 			<form class="d-grid cols-2 cols-xxs-1" id="formCreateUser">
 				<div class="form-group">
-					<label for="lastname">Nom <span class="mandatory ft-red">*</span></label>
-					<input type="text" name="lastname" id="lastname" class="m-bottom-0" placeholder="Votre nom" required>
-				</div>
-				<div class="form-group">
 					<label for="firstname">Prénom <span class="mandatory ft-red">*</span></label>
 					<input type="text" name="firstname" id="firstname" class="m-bottom-0" placeholder="Votre prénom" required>
+				</div>
+				<div class="form-group">
+					<label for="lastname">Nom <span class="mandatory ft-red">*</span></label>
+					<input type="text" name="lastname" id="lastname" class="m-bottom-0" placeholder="Votre nom" required>
 				</div>
 				<div class="form-group">
 					<label for="email">Adresse email <span class="mandatory ft-red">*</span></label>
@@ -38,52 +68,82 @@
 		<?php endif ?>
 	<?php endif ?>
 </div>
-
 <script>
 	var rt = '{{request_token}}';
-    window.addEventListener('load', function(){});
+	<?php if ($this->hasUser): ?>
+    	window.addEventListener('load', function(){
+    		reqVivo('getOffers').then(async function(res){
+    			// console.log(res);
+    			for(var offer of res.html){
+    				$('.auction__latestOffers__wrapper').prepend(offer);
+    			}
+    			// if($('.auction__latestOffers__wrapper .auction__offer').length != 0)
+    				// $('input#userOffer').val(parseInt($('.auction__latestOffers__wrapper .auction__offer').first().data('amount'))+10).trigger('change');	
+    		});
 
-    var createUser = function(){
+    		$('input#userOffer').on('change keyup',function(){
+		    	this.value 	= this.value.replace(/\D+/g,'');
+		    });
+    	});
+
+
+    	var timerCheck;
+		var timer = ms => new Promise(res => setTimeout(res, ms))
+    	timerCheck = setInterval(function(){
+    		var data = {};
+    		if($('.auction__latestOffers__wrapper .auction__offer').length != 0)
+    			data.timestamp = $('.auction__latestOffers__wrapper .auction__offer').first().data('tstamp');
+    		reqVivo('getOffers',data).then(async function(res){
+    			// console.log(res);
+    			if (res.html) {
+	    			for(var offer of res.html){
+	    				$('.auction__latestOffers__wrapper').prepend(offer);
+	    				// await timer(1000)
+	    			}
+    			}
+    		}).catch(function(err){
+    			clearInterval(timerCheck)
+    		})
+    	},1000);
+
+    	var increaseOffer = function(btn){
+    		return new Promise(function(resolve,reject){
+    			var amount = btn.$el.data('amount');
+    			if($('.auction__latestOffers__wrapper .auction__offer').length != 0)
+    				amount += parseInt($('.auction__latestOffers__wrapper .auction__offer').first().data('amount'));
+    			$('input#userOffer').val(amount).trigger('change');
+    		    resolve()
+    		});
+    	}
+    	
+    	var addOffer = function(btn){
+    		return new Promise(function(resolve,reject){
+    			if (!$('input#userOffer').val())
+    				reject()
+    			reqVivo('addOffer',{'amount':$('input#userOffer').val()}).then(function(res){
+    				// console.log(res);
+    				notif_fade[res.status](res.msg);
+    				$('input#userOffer').val('')
+    		    	resolve();
+    			}).catch(function(err){
+    				resolve()
+    			});
+    		});
+    	}
+	<?php endif ?>
+
+
+
+    var logoutUser = function(btn){
     	return new Promise(function(resolve,reject){
-    		var isOK = true;
-    	    var data = {
-   				'TL_AJAX':true ,
-				'REQUEST_TOKEN':rt ,
-				'action': 'createUser',
-				'module': <?= $this->moduleID ?>
-   			};
-   			$('#formCreateUser input').each(function(){
-   				if (this.required && !this.value){
-   					notif_fade.warning('Veuillez remplir le champs '+$(this).prev('label').html());
-   					isOK = false;
-   				}
-   				data[this.name] = this.value;
-   			});
-   			if (!isOK)
-   				reject();
-   			else{
-   				$.ajax({
-					timeout: 10000,
-					url: window.location.pathname,
-					type: 'post',
-					data: data,
-				}).done(function(data){
-	      			try{var results = $.parseJSON(data); } catch(e){ reject();throw e;}
-	      			console.log(results);
-	  				if (results.status == 'success'){
-	  				}
-		    		resolve();
-				}).fail(function(jqXHR, textStatus){
-					console.log(toggleFeed);
-		         	console.log(jqXHR, textStatus);
-		         	reject();
-		        });
-   			}
-   			console.log(data);
+    	    reqVivo('logoutUser').then(function(res){
+    	    	window.location.reload();
+    	    	resolve()
+    	    })
     	});
     }
 
-    var createUser_ = function(){
+    var createUser = function(btn){
     	return new Promise(function(resolve,reject){
     		var isOK = true;
     		var data = {}
@@ -97,8 +157,13 @@
    			if (!isOK)
    				reject();
    			else{
-   				reqVivo('createUser',data).then(function(results){
-   					console.log(results);
+   				reqVivo('createUser',data).then(function(res){
+   					// console.log(res);
+   					notif_fade.success(res.msg),
+   					setTimeout(function(){
+   						window.location.reload();
+   					},3000)
+   					resolve()
    				}).catch(function(err){
    					reject(err);
    				})
@@ -138,36 +203,9 @@
 				reject(textStatus+"<br>"+errorThrown);
 			})
 		}).catch(function(err){
-			notif.error(err);
+			console.log(err);
+			notif_fade.error(err);
 			throw err;
 		});
 	}
 </script>	
-
-<!-- 
-Si t'as un user dans le template
-$this->Template->hasUser = true;
-                $this->Template->userFirstname = $arrUser[0];
-                $this->Template->userLastname = $arrUser[1];
-                $this->Template->userCity = $arrUser[2];
-                $this->Template->userPhone = $arrUser[3];
-                $this->Template->userEmail = $arrUser[4];
-Si t'as pas d'offres :
-$this->Template->noOffers = true;
-Les offres en html, à implode (comme d'hab) : $this->Template->offers = $this->parseItems($arrOffers);
-AJAX -> createUser
-firstname
-lastname
-city
-email
-phone
-(phone est pas mandatory, les autres t'envoient péter) 
--->
-
-<!-- AJAX -> getOffers
-timestamp
-Si timestamp est renseigné, ça te retournera toutes les offres après ledit timetstamp
-Ca te permettra d'ajouter les offres au DOM sans avoir à tout recharger -->
-<!-- 
-AJAX -> addOffer
-amount -->
