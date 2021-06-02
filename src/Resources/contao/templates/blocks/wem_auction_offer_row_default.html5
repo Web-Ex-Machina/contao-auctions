@@ -1,1 +1,9 @@
-default offer row
+<div class="auction__offer" data-tstamp="<?= $this->tstamp ?>" data-amount="<?= str_replace(',', '', $this->amount) ?>">
+	<div class="infos">
+		<!-- <span class="ft-1-1-em"><?= $this->member['firstname'] ?> <?= $this->member['lastname'] ?></span> <span class="ft-0-8-em opa-4 ft-nowrap"> | <?= $this->createdAt ?></span> -->
+		<span class="ft-0-8-em opa-4 ft-nowrap"> Offre faite le <?= $this->createdAt ?></span>
+	</div>
+	<div class="amount__wrapper">
+		<span class="amount"><?= $this->amount ?></span> <span class="currency">€</span>
+	</div>
+</div>
